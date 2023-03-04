@@ -19,16 +19,14 @@ export const Onboarding: FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>();
   const navigate = useNavigate();
 
-  const handleTokenInput = async (e: string): Promise<void> => {
-    setToken(e);
+  const handleTokenSubmit = async (newToken: string): Promise<void> => {
+    setToken(newToken);
     setStep(OnboardingStep.Checking);
-    await window.electron.ipcRenderer.checkToken({
-      token,
-    });
-    const tokenUserInfo = {
-      name: 'a',
-      avatarUrl: 'a',
-    };
+    const { userInfo: tokenUserInfo } =
+      await window.electron.ipcRenderer.checkToken({
+        token: newToken,
+      });
+
     if (!tokenUserInfo) {
       setErrorMessage('Token invalide');
       setStep(OnboardingStep.TokenInput);
@@ -39,7 +37,9 @@ export const Onboarding: FC = () => {
   };
 
   const saveToken = async (): Promise<void> => {
-    // window.localStorage.setItem(KEY_GITLAB_API_TOKEN, token);
+    await window.electron.ipcRenderer.checkToken({
+      token,
+    });
     navigate('/');
   };
 
@@ -47,7 +47,7 @@ export const Onboarding: FC = () => {
     <OnboardingModal>
       {step === OnboardingStep.TokenInput && (
         <OnboardingTokenInput
-          onSubmit={handleTokenInput}
+          onSubmit={handleTokenSubmit}
           errorMessage={errorMessage}
         />
       )}

@@ -58,17 +58,27 @@ export class HttpClient {
             request.setHeader(key, value);
           });
         }
+
+        let responseBuffer = Buffer.alloc(0);
+
         request
           .on('response', (response) => {
             response
-              .on('data', (data) => {
-                const responseString = data.toString('utf8');
+              .on('end', () => {
                 resolve({
                   statusCode: response.statusCode,
                   statusText: response.statusMessage,
-                  data: responseString,
+                  data: responseBuffer.toString('utf-8'),
                   headers: response.headers,
                 });
+              })
+              .on('data', (data) => {
+                const newBuffer = Buffer.allocUnsafe(
+                  responseBuffer.length + data.length
+                );
+                responseBuffer.copy(newBuffer);
+                data.copy(newBuffer, responseBuffer.length);
+                responseBuffer = newBuffer;
               })
               .on('error', () => {
                 reject(
@@ -123,7 +133,7 @@ export class HttpClient {
     ) {
       return {
         ...httpResponse,
-        data: JSON.parse(httpResponse.data),
+        data: httpResponse.data ? JSON.parse(httpResponse.data) : {},
       };
     }
     if (requestOptions.responseType === 'plain') {

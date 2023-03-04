@@ -1,5 +1,10 @@
 import { contextBridge } from 'electron';
-import { Channel, CheckTokenMessage, CheckTokenResponse } from '../types/ipc';
+import {
+  AddTokenMessage,
+  Channel,
+  CheckTokenMessage,
+  CheckTokenResponse,
+} from '../types/ipc';
 import { sendMessagePromise } from './helpers/preloadIpc';
 
 const electronHandler = {
@@ -9,10 +14,12 @@ const electronHandler = {
     ): Promise<CheckTokenResponse> => {
       return sendMessagePromise(Channel.CheckToken, message);
     },
+    saveToken: async (message: AddTokenMessage): Promise<void> => {
+      return sendMessagePromise(Channel.AddToken, message);
+    },
   },
 };
 
-console.log('HEEEERssE');
 contextBridge.exposeInMainWorld('electron', electronHandler);
 
 export type ElectronHandler = typeof electronHandler;

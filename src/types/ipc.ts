@@ -13,3 +13,7 @@ export interface CheckTokenMessage {
 export interface CheckTokenResponse {
   userInfo?: UserInfo;
 }
+
+export interface AddTokenMessage {
+  token: string;
+}
