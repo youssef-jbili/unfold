@@ -1,5 +1,15 @@
-export type Channel = 'add-token' | 'get-user-info' | 'ipc-example';
+import type { UserInfo } from './entities';
 
-export interface AddTokenMessage {
+export enum Channel {
+  AddToken = 'add-token',
+  CheckToken = 'check-token',
+  GetUserInfo = 'get-user-info',
+}
+
+export interface CheckTokenMessage {
   token: string;
+}
+
+export interface CheckTokenResponse {
+  userInfo?: UserInfo;
 }

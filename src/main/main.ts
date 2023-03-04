@@ -12,10 +12,11 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { getSavedToken } from './token';
+import { setupMainIpcHandler } from './ipcHandler';
 
 let mainWindow: BrowserWindow | null = null;
 
+setupMainIpcHandler();
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -68,7 +69,6 @@ const createWindow = async () => {
     },
   });
 
-  console.log('ABCD', getSavedToken());
   mainWindow.loadURL(resolveHtmlPath('index.html', 'onboarding'));
 
   mainWindow.on('ready-to-show', () => {

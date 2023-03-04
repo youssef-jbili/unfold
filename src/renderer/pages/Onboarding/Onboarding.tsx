@@ -22,6 +22,9 @@ export const Onboarding: FC = () => {
   const handleTokenInput = async (e: string): Promise<void> => {
     setToken(e);
     setStep(OnboardingStep.Checking);
+    await window.electron.ipcRenderer.checkToken({
+      token,
+    });
     const tokenUserInfo = {
       name: 'a',
       avatarUrl: 'a',

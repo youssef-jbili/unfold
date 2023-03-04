@@ -86,7 +86,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.0",
     "styled-components": "^5.3.6",
-    "uuid": "^9.0.0"
+    "uuid-browser": "^3.1.0"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
@@ -103,6 +103,8 @@
     "@types/react-test-renderer": "^18.0.0",
     "@types/styled-components": "^5.1.26",
     "@types/terser-webpack-plugin": "^5.0.4",
+    "@types/uuid": "^9.0.1",
+    "@types/uuid-browser": "^3.1.0",
     "@types/webpack-bundle-analyzer": "^4.4.2",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
