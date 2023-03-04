@@ -10,18 +10,9 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
+import { getSavedToken } from './token';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -38,10 +29,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
-if (isDebug) {
-  require('electron-debug')();
-}
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
@@ -81,7 +68,8 @@ const createWindow = async () => {
     },
   });
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  console.log('ABCD', getSavedToken());
+  mainWindow.loadURL(resolveHtmlPath('index.html', 'onboarding'));
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -106,10 +94,6 @@ const createWindow = async () => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
-
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
 };
 
 /**

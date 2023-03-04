@@ -1,37 +1,6 @@
 {
-  "description": "A foundation for scalable desktop apps",
-  "keywords": [
-    "electron",
-    "boilerplate",
-    "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
-  ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
-  "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
-  },
-  "contributors": [
-    {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    }
-  ],
+  "description": "Gitlab planning tool",
+  "license": "proprietary",
   "main": "./src/main/main.ts",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -111,10 +80,13 @@
   "dependencies": {
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
+    "electron-store": "^8.1.0",
     "electron-updater": "^5.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.0"
+    "react-router-dom": "^6.4.0",
+    "styled-components": "^5.3.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
@@ -129,6 +101,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/styled-components": "^5.1.26",
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/webpack-bundle-analyzer": "^4.4.2",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
