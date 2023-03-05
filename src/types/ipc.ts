@@ -11,7 +11,7 @@ export interface CheckTokenMessage {
 }
 
 export interface CheckTokenResponse {
-  userInfo?: UserInfo;
+  userInfo?: UserInfo | null;
 }
 
 export interface AddTokenMessage {

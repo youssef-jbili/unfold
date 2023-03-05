@@ -5,7 +5,7 @@ import {
   CheckTokenMessage,
   CheckTokenResponse,
 } from '../types/ipc';
-import { sendMessagePromise } from './helpers/preloadIpc';
+import { sendMessagePromise } from './helpers/ipc';
 
 const electronHandler = {
   ipcRenderer: {

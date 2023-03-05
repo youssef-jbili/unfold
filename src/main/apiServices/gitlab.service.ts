@@ -1,4 +1,5 @@
 import type { UserInfo } from '../../types/entities';
+import { HttpRequestError } from '../../types/httpClient';
 import { gitlabApi } from './api';
 
 export const getPaginatedItemsFromGitlab = async <T>(
@@ -66,7 +67,13 @@ export const getUserInfoForToken = async (
       name: userInfo.name,
       avatarUrl: userInfo.avatar_url,
     };
-  } catch {
-    return null;
+  } catch (error: unknown) {
+    if (
+      error instanceof HttpRequestError &&
+      error.details?.statusCode === 401
+    ) {
+      return null;
+    }
+    throw error;
   }
 };

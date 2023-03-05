@@ -1,27 +1,30 @@
-import { ipcMain } from 'electron';
-import { AddTokenMessage, Channel, CheckTokenMessage } from '../types/ipc';
+import {
+  AddTokenMessage,
+  Channel,
+  CheckTokenMessage,
+  CheckTokenResponse,
+} from '../types/ipc';
 import { getUserInfoForToken } from './apiServices/gitlab.service';
+import { handleMessage } from './helpers/ipc';
 import { setToken } from './token';
 
 export const setupMainIpcHandler = () => {
-  ipcMain.on(
+  handleMessage(
     Channel.CheckToken,
-    async (event, returnChannel: string, { token }: CheckTokenMessage) => {
+    async ({ token }: CheckTokenMessage): Promise<CheckTokenResponse> => {
       const userInfo = await getUserInfoForToken(token);
-      event.sender.send(returnChannel, true, { userInfo });
+      return { userInfo };
     }
   );
 
-  ipcMain.on(
+  handleMessage(
     Channel.AddToken,
-    async (event, returnChannel: string, { token }: AddTokenMessage) => {
+    async ({ token }: AddTokenMessage): Promise<void> => {
       const userInfo = await getUserInfoForToken(token);
       if (!userInfo) {
-        event.sender.send(returnChannel, false, new Error('invalid token'));
-        return;
+        throw new Error('invalid token');
       }
       setToken(token);
-      event.sender.send(returnChannel, true);
     }
   );
 };
