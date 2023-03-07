@@ -1,5 +1,6 @@
 import type { UserInfo } from '../../types/entities';
 import { HttpRequestError } from '../../types/httpClient';
+import { getSavedToken } from '../utils/token';
 import { gitlabApi } from './api';
 
 export const getPaginatedItemsFromGitlab = async <T>(
@@ -12,9 +13,17 @@ export const getPaginatedItemsFromGitlab = async <T>(
     per_page: String(pagination.perPage),
     ...options,
   });
-
+  const token = getSavedToken();
+  if (!token) {
+    throw new Error('user token not found');
+  }
   const { data } = await gitlabApi.get<T[]>(
-    `${relativePath}?${queryParams.toString()}`
+    `${relativePath}?${queryParams.toString()}`,
+    {
+      headers: {
+        'PRIVATE-TOKEN': token,
+      },
+    }
   );
 
   return data;

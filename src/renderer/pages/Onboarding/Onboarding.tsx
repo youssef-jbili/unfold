@@ -1,5 +1,4 @@
-import type { FC } from 'react';
-import { useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OnboardingConfirmation } from '../../components/onboarding/OnboardingConfirmation';
 import { OnboardingModal } from '../../components/onboarding/OnboardingModal';
@@ -19,13 +18,24 @@ export const Onboarding: FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | undefined>();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const asyncCheck = async () => {
+      const { hasToken } = await window.electron.tokens.hasToken();
+      if (hasToken) {
+        navigate('/');
+      }
+    };
+    asyncCheck();
+  }, [navigate]);
+
   const handleTokenSubmit = async (newToken: string): Promise<void> => {
     setToken(newToken);
     setStep(OnboardingStep.Checking);
-    const { userInfo: tokenUserInfo } =
-      await window.electron.ipcRenderer.checkToken({
+    const { userInfo: tokenUserInfo } = await window.electron.tokens.checkToken(
+      {
         token: newToken,
-      });
+      }
+    );
 
     if (!tokenUserInfo) {
       setErrorMessage('Token invalide');
@@ -37,7 +47,7 @@ export const Onboarding: FC = () => {
   };
 
   const saveToken = async (): Promise<void> => {
-    await window.electron.ipcRenderer.checkToken({
+    await window.electron.tokens.saveToken({
       token,
     });
     navigate('/');

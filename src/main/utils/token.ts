@@ -1,10 +1,11 @@
 import { safeStorage } from 'electron';
 import Store from 'electron-store';
+import { PrivateStore } from '../../types/store';
 
-const STORE_KEY = 'gitlab-automator-encrypted';
-const STORE_TOKEN_KEY = 'gitlab-token';
+const STORE_KEY = 'gitlab-automator';
+const STORE_TOKEN_KEY = 'gitlabToken';
 
-const store = new Store<Record<string, string>>({
+const store = new Store<PrivateStore>({
   name: STORE_KEY,
   watch: true,
 });
@@ -13,7 +14,7 @@ export const getSavedToken = (): string | undefined => {
   if (!safeStorage.isEncryptionAvailable) {
     throw new Error('Cannot decrypt gitlab token');
   }
-  const encryptedToken = store.store[STORE_TOKEN_KEY];
+  const encryptedToken = store.store.gitlabToken;
   if (!encryptedToken) {
     return undefined;
   }

@@ -4,7 +4,7 @@ import { Channel } from '../../types/ipc';
 
 export const sendMessagePromise = <T>(
   channel: Channel,
-  message: unknown
+  message?: unknown
 ): Promise<T> =>
   new Promise((resolve, reject) => {
     const uniqueChannel = `${channel};${v4()}`;

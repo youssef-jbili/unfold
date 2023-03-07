@@ -83,6 +83,7 @@
     "electron-updater": "^5.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.5",
     "react-router-dom": "^6.4.0",
     "styled-components": "^5.3.6",
     "uuid-browser": "^3.1.0"
@@ -159,8 +160,8 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Gitlab Automator",
+    "appId": "fr.youssefjbili.gitlabautomator",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

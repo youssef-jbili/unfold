@@ -10,7 +10,7 @@ export function resolveHtmlPath(htmlFileName: string, route: string) {
   }
   return `file://${path.resolve(
     __dirname,
-    `../renderer/#/${route}`,
+    '../renderer/',
     htmlFileName
-  )}`;
+  )}#/${route}`;
 }

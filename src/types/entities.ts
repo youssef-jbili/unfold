@@ -25,3 +25,7 @@ export interface UserInfo {
   name: string;
   avatarUrl: string;
 }
+
+export interface IssueDetailsConfig {
+  highlightStrong: boolean;
+}

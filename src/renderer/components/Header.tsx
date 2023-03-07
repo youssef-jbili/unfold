@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import styled from 'styled-components';
-import { PrimaryButton } from '../styles/base';
+import { PrimaryButton, SecondaryButton } from '../styles/base';
 
 interface HeaderProps {
   onRefresh: () => void;
@@ -10,6 +10,8 @@ interface HeaderProps {
 const HeaderContainer = styled.div`
   background: #303030;
   padding: 10px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const Header: FC<HeaderProps> = ({ onRefresh, isRefreshing }) => (
@@ -17,6 +19,6 @@ export const Header: FC<HeaderProps> = ({ onRefresh, isRefreshing }) => (
     <PrimaryButton type="button" onClick={onRefresh} disabled={isRefreshing}>
       {isRefreshing ? 'Refreshing...' : 'Refresh'}
     </PrimaryButton>
-    {process.env.REACT_APP_TEST}
+    <SecondaryButton onClick={() => {}}>open side window</SecondaryButton>
   </HeaderContainer>
 );
