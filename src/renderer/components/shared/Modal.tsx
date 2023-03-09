@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useKeyboard } from '../../utils/keyboard';
+import { useKeyboard } from '../../hooks/keyboard';
 
 let openModals = 0;
 

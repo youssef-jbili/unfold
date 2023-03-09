@@ -1,14 +1,16 @@
 import { contextBridge } from 'electron';
+import { Issue } from '../types/entities';
 import {
   AddTokenMessage,
   Channel,
   CheckTokenMessage,
   CheckTokenResponse,
+  EventType,
   GetGitlabIssuesMessage,
-  GetGitlabIssuesResponse,
   HasTokenResponse,
+  Unsubscriber,
 } from '../types/ipc';
-import { sendMessagePromise } from './helpers/ipc';
+import { sendMessagePromise, subscribeToEvent } from './helpers/ipc';
 
 const electronHandler = {
   tokens: {
@@ -27,10 +29,25 @@ const electronHandler = {
     },
   },
   issues: {
-    getAllIssuesFromGitlab: async (
+    startFetchIssuesFromGitlab: (
       message: GetGitlabIssuesMessage
-    ): Promise<GetGitlabIssuesResponse> => {
-      return sendMessagePromise(Channel.GetGitlabIssues, message);
+    ): Promise<void> => {
+      return sendMessagePromise(Channel.StartFetchGitlabIssues, message);
+    },
+  },
+  windows: {
+    openSideWindow: (): Promise<void> => {
+      return sendMessagePromise(Channel.OpenSideWindow);
+    },
+  },
+  network: {
+    getNetworkStatus: (): Promise<boolean> => {
+      return sendMessagePromise(Channel.GetNetworkStatus);
+    },
+  },
+  listeners: {
+    onIssuesFetch: (handler: (issues: Issue[]) => void): Unsubscriber => {
+      return subscribeToEvent(EventType.IssuesFetch, handler);
     },
   },
 };

@@ -9,12 +9,20 @@ export const WINDOW_MANAGER = (() => {
 
     private stickyWindow: BrowserWindow | null = null;
 
-    public static readonly RESOURCES_PATH = app.isPackaged
+    public readonly RESOURCES_PATH = app.isPackaged
       ? path.join(process.resourcesPath, 'assets')
       : path.join(__dirname, '../../assets');
 
-    static getAssetPath(...paths: string[]): string {
-      return path.join(WindowManager.RESOURCES_PATH, ...paths);
+    public readonly PRELOAD_PATH = app.isPackaged
+      ? path.join(__dirname, '../preload.js')
+      : path.join(__dirname, '../../../.erb/dll/preload.js');
+
+    get hasOpenWindow(): boolean {
+      return !!this.mainWindow || !!this.stickyWindow;
+    }
+
+    getAssetPath(...paths: string[]): string {
+      return path.join(this.RESOURCES_PATH, ...paths);
     }
 
     getMainWindow(): BrowserWindow {
@@ -22,15 +30,13 @@ export const WINDOW_MANAGER = (() => {
         return this.mainWindow;
       }
       this.mainWindow = new BrowserWindow({
-        show: false,
+        show: true,
         width: 1024,
         height: 728,
-        icon: WindowManager.getAssetPath('icon.png'),
+        icon: this.getAssetPath('icon.png'),
         title: 'Gitlab Automator',
         webPreferences: {
-          preload: app.isPackaged
-            ? path.join(__dirname, '../preload.js')
-            : path.join(__dirname, '../../../.erb/dll/preload.js'),
+          preload: this.PRELOAD_PATH,
         },
       });
 
@@ -61,6 +67,52 @@ export const WINDOW_MANAGER = (() => {
       });
 
       return this.mainWindow;
+    }
+
+    getStickyWindow(): BrowserWindow {
+      if (this.stickyWindow) {
+        this.stickyWindow.restore();
+        this.stickyWindow.focus();
+        return this.stickyWindow;
+      }
+      this.stickyWindow = new BrowserWindow({
+        show: true,
+        width: 250,
+        height: 450,
+        icon: this.getAssetPath('icon.png'),
+        title: 'Gitlab Automator tracker',
+        webPreferences: {
+          preload: this.PRELOAD_PATH,
+        },
+        alwaysOnTop: true,
+        maximizable: false,
+        maxWidth: 250,
+        minWidth: 250,
+      });
+
+      this.stickyWindow.loadURL(resolveHtmlPath('index.html', 'tracker'));
+
+      this.stickyWindow.on('ready-to-show', () => {
+        if (!this.stickyWindow) {
+          throw new Error('"sticky" is not defined');
+        }
+        this.stickyWindow.show();
+      });
+
+      this.stickyWindow.on('closed', () => {
+        this.stickyWindow = null;
+      });
+
+      const menuBuilder = new MenuBuilder(this.stickyWindow);
+      menuBuilder.buildMenu();
+
+      // Open urls in the user's browser
+      this.stickyWindow.webContents.setWindowOpenHandler((edata) => {
+        shell.openExternal(edata.url);
+        return { action: 'deny' };
+      });
+
+      return this.stickyWindow;
     }
   }
 

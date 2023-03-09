@@ -6,9 +6,17 @@ export enum Channel {
   CheckToken = 'check-token',
   HasToken = 'has-token',
   // Issues
-  GetGitlabIssues = 'get-gitlab-issues',
+  StartFetchGitlabIssues = 'start-fetch-gitlab-issues',
   // Window management
   OpenSideWindow = 'open-side-window',
+  // Network
+  GetNetworkStatus = 'get-network-status',
+}
+
+export type Unsubscriber = () => void;
+
+export enum EventType {
+  IssuesFetch = 'issues-fetch',
 }
 
 export interface CheckTokenMessage {

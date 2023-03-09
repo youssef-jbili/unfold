@@ -1,6 +1,6 @@
 import { ipcMain, ipcRenderer } from 'electron';
 import { v4 } from 'uuid-browser';
-import { Channel } from '../../types/ipc';
+import { Channel, EventType, Unsubscriber } from '../../types/ipc';
 
 export const sendMessagePromise = <T>(
   channel: Channel,
@@ -35,4 +35,17 @@ export const handleMessage = <T, U>(
       event.sender.send(returnChannel, false, err);
     }
   });
+};
+
+export const subscribeToEvent = <T>(
+  event: EventType,
+  handler: (t: T) => void
+): Unsubscriber => {
+  const subscriber = (_e: unknown, t: T) => {
+    handler(t);
+  };
+  ipcRenderer.on(event, subscriber);
+  return () => {
+    ipcRenderer.removeListener(event, subscriber);
+  };
 };

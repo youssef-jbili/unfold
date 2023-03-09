@@ -45,16 +45,24 @@ export const SecondaryButton = styled.button`
 
 export const PrimaryButton = styled.button`
   ${baseButton};
-  box-shadow: inset 0 0 0 1px #63a6e9;
-  background-color: #428fdc;
   padding: 6px 8px;
   border-radius: 3px;
   transition: box-shadow 0.2s ease;
-  &:hover {
-    box-shadow: inset 0 0 0 2px #cbe2f9, 0 2px 2px 0 rgb(0 0 0 / 8%);
+
+  :not(&:disabled) {
+    box-shadow: inset 0 0 0 1px #63a6e9;
+    background-color: #428fdc;
+    &:hover {
+      box-shadow: inset 0 0 0 2px #cbe2f9, 0 2px 2px 0 rgb(0 0 0 / 8%);
+    }
+    &:focus {
+      box-shadow: inset 0 0 0 1px #cbe2f9, 0 0 0 1px #333, 0 0 0 3px #1f75cb;
+    }
   }
-  &:focus {
-    box-shadow: inset 0 0 0 1px #cbe2f9, 0 0 0 1px #333, 0 0 0 3px #1f75cb;
+  &:disabled {
+    box-shadow: inset 0 0 0 1px #868686;
+    background-color: #868686;
+    cursor: not-allowed;
   }
 `;
 

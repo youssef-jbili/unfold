@@ -62,12 +62,12 @@ export const Column: FC<{
         <FlexInlineAlignCenter gap="4px">
           <TertiaryButton
             onClick={() =>
-              setIsCollapsed((x) => {
+              setIsCollapsed((collapsedStatus) => {
                 window.localStorage.setItem(
                   `collapse-${label}`,
-                  (!x).toString()
+                  (!collapsedStatus).toString()
                 );
-                return !x;
+                return !collapsedStatus;
               })
             }
           >

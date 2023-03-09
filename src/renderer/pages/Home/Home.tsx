@@ -8,6 +8,7 @@ import { Header } from '../../components/Header';
 import { IssueDetails } from '../../components/issue/IssueDetails';
 import { AppContext } from './context';
 import { COLUMNS, EPIC_NAME } from '../../constants';
+import { getStoredIssues, saveIssues } from '../../services/db';
 
 export const Home: FC = () => {
   const { issueId } = useParams();
@@ -22,16 +23,21 @@ export const Home: FC = () => {
     new Set()
   );
 
+  useEffect(() => {
+    return window.electron.listeners.onIssuesFetch((issues) => {
+      console.log(issues);
+      saveIssues(issues);
+      setAllIssues(issues);
+      setIsRefreshing(false);
+    });
+  }, [setAllIssues]);
+
   const refresh = useCallback(async (): Promise<void> => {
     setIsRefreshing(true);
-    try {
-      const { issues } = await window.electron.issues.getAllIssuesFromGitlab({
-        label: EPIC_NAME,
-      });
-      setAllIssues(issues);
-    } finally {
-      setIsRefreshing(false);
-    }
+
+    await window.electron.issues.startFetchIssuesFromGitlab({
+      label: EPIC_NAME,
+    });
   }, []);
 
   useEffect(() => {
@@ -43,7 +49,11 @@ export const Home: FC = () => {
   }, [allIssues, setSelectedIssue, issueId]);
 
   useEffect(() => {
-    refresh();
+    const loadCachedIssues = async () => {
+      const savedIssues = await getStoredIssues();
+      setAllIssues(savedIssues);
+    };
+    loadCachedIssues();
   }, [refresh]);
 
   useEffect(() => {

@@ -1,9 +1,11 @@
+import { ipcMain, net, webContents } from 'electron';
 import { mapGitlabIssueToIssue } from './mappers/issue.mapper';
 import {
   AddTokenMessage,
   Channel,
   CheckTokenMessage,
   CheckTokenResponse,
+  EventType,
   GetGitlabIssuesMessage,
   GetGitlabIssuesResponse,
   HasTokenResponse,
@@ -12,6 +14,7 @@ import { getUserInfoForToken } from './apiServices/gitlab.service';
 import { getAllIssuesFromGitlab } from './apiServices/issues.service';
 import { handleMessage } from './helpers/ipc';
 import { getSavedToken, setToken } from './utils/token';
+import { WINDOW_MANAGER } from './helpers/windows';
 
 export const setupMainIpcHandler = () => {
   // Tokens
@@ -44,16 +47,24 @@ export const setupMainIpcHandler = () => {
   // Issues
 
   handleMessage(
-    Channel.GetGitlabIssues,
-    async ({
-      label,
-    }: GetGitlabIssuesMessage): Promise<GetGitlabIssuesResponse> => {
-      const issues = await getAllIssuesFromGitlab(label);
-      return { issues: mapGitlabIssueToIssue(issues) };
+    Channel.StartFetchGitlabIssues,
+    async ({ label }: GetGitlabIssuesMessage): Promise<void> => {
+      const issues = mapGitlabIssueToIssue(await getAllIssuesFromGitlab(label));
+      webContents.getAllWebContents().forEach((wc) => {
+        wc.send(EventType.IssuesFetch, issues);
+      });
     }
   );
 
   // Window management
 
-  handleMessage(Channel.OpenSideWindow, async (): Promise<void> => {});
+  handleMessage(Channel.OpenSideWindow, async (): Promise<void> => {
+    WINDOW_MANAGER.getStickyWindow();
+  });
+
+  // Network
+
+  handleMessage(Channel.GetNetworkStatus, () => {
+    return net.isOnline();
+  });
 };
