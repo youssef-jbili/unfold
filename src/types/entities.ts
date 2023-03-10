@@ -9,6 +9,17 @@ export interface CardDisplay {
   transparent: boolean;
 }
 
+export interface UserInfo {
+  name: string;
+  avatarUrl: string;
+}
+
+export interface DetailedUserInfo extends UserInfo {
+  id: number;
+  username: string;
+  webUrl: string;
+}
+
 export interface Issue {
   id: number;
   title: string;
@@ -16,14 +27,9 @@ export interface Issue {
   weight?: number | null;
   labels: Label[];
   order: number;
-  assignees: number[];
+  assignees: DetailedUserInfo[];
   description: string;
   display?: CardDisplay;
-}
-
-export interface UserInfo {
-  name: string;
-  avatarUrl: string;
 }
 
 export interface IssueDetailsConfig {

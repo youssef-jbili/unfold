@@ -83,9 +83,9 @@ const CardContent: FC<{
             issue.assignees.length > 0 &&
             issue.assignees.map((assignee, index) => (
               <UserIcon
-                key={assignee}
+                key={assignee.id}
                 alt=""
-                src={`https://git.legalplace.eu/uploads/-/system/user/avatar/${assignee}/avatar.png?width=24`}
+                src={`${assignee.avatarUrl}?width=24`}
                 position={issue.assignees.length - 1 - index}
               />
             ))}

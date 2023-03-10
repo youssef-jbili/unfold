@@ -1,5 +1,19 @@
-import type { Issue } from '../../types/entities';
-import type { GitlabIssue } from '../../types/GitlabIssue';
+import type { DetailedUserInfo, Issue } from '../../types/entities';
+import type { GitlabIssue, GitlabUser } from '../../types/GitlabIssue';
+
+const mapAssignee = ({
+  avatar_url,
+  id,
+  name,
+  username,
+  web_url,
+}: GitlabUser): DetailedUserInfo => ({
+  id,
+  avatarUrl: avatar_url,
+  name,
+  username,
+  webUrl: web_url,
+});
 
 export const mapGitlabIssueToIssue = (gitlabIssues: GitlabIssue[]): Issue[] =>
   gitlabIssues.map(
@@ -15,7 +29,7 @@ export const mapGitlabIssueToIssue = (gitlabIssues: GitlabIssue[]): Issue[] =>
         color: label.color,
         textColor: label.text_color,
       })),
-      assignees: assignees.map((x) => x.id),
+      assignees: assignees.map(mapAssignee),
       description,
     })
   );

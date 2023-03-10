@@ -11,7 +11,7 @@ export const sendMessagePromise = <T>(
 
     ipcRenderer.once(
       uniqueChannel,
-      (_event, success: boolean, returnedData: T) => {
+      (_event, success: boolean, returnedData: T /* or error */) => {
         if (!success) {
           reject(returnedData);
         }
