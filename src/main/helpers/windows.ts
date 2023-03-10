@@ -14,7 +14,7 @@ export const WINDOW_MANAGER = (() => {
       : path.join(__dirname, '../../assets');
 
     public readonly PRELOAD_PATH = app.isPackaged
-      ? path.join(__dirname, '../preload.js')
+      ? path.join(__dirname, 'preload.js')
       : path.join(__dirname, '../../../.erb/dll/preload.js');
 
     get hasOpenWindow(): boolean {
