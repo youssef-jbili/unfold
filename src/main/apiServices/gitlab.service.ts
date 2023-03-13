@@ -1,6 +1,6 @@
 import type { UserInfo } from '../../types/entities';
 import { HttpRequestError } from '../../types/httpClient';
-import { getSavedToken } from '../utils/token';
+import { getSavedToken } from '../utils/store';
 import { gitlabApi } from './api';
 
 export const getPaginatedItemsFromGitlab = async <T>(

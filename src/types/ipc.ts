@@ -1,4 +1,5 @@
 import type { Issue, UserInfo } from './entities';
+import { PublicStore } from './store';
 
 export enum Channel {
   // Token
@@ -11,6 +12,8 @@ export enum Channel {
   OpenSideWindow = 'open-side-window',
   // Network
   GetNetworkStatus = 'get-network-status',
+  // Settings
+  GetSettings = 'get-settings',
 }
 
 export type Unsubscriber = () => void;
@@ -42,3 +45,5 @@ export interface GetGitlabIssuesMessage {
 export interface GetGitlabIssuesResponse {
   issues: Issue[];
 }
+
+export type GetSettingsResponse = PublicStore;

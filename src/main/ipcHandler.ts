@@ -1,4 +1,4 @@
-import { ipcMain, net, webContents } from 'electron';
+import { net, webContents } from 'electron';
 import { mapGitlabIssueToIssue } from './mappers/issue.mapper';
 import {
   AddTokenMessage,
@@ -7,13 +7,13 @@ import {
   CheckTokenResponse,
   EventType,
   GetGitlabIssuesMessage,
-  GetGitlabIssuesResponse,
+  GetSettingsResponse,
   HasTokenResponse,
 } from '../types/ipc';
 import { getUserInfoForToken } from './apiServices/gitlab.service';
 import { getAllIssuesFromGitlab } from './apiServices/issues.service';
 import { handleMessage } from './helpers/ipc';
-import { getSavedToken, setToken } from './utils/token';
+import { getPublicSettings, getSavedToken, setToken } from './utils/store';
 import { WINDOW_MANAGER } from './helpers/windows';
 
 export const setupMainIpcHandler = () => {
@@ -33,7 +33,7 @@ export const setupMainIpcHandler = () => {
       if (!userInfo) {
         throw new Error('invalid token');
       }
-      setToken(token);
+      setToken(token, userInfo.name);
     }
   );
 
@@ -66,5 +66,9 @@ export const setupMainIpcHandler = () => {
 
   handleMessage(Channel.GetNetworkStatus, () => {
     return net.isOnline();
+  });
+
+  handleMessage(Channel.GetSettings, (): GetSettingsResponse => {
+    return getPublicSettings();
   });
 };

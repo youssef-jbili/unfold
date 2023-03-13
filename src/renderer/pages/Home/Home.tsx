@@ -25,7 +25,6 @@ export const Home: FC = () => {
 
   useEffect(() => {
     return window.electron.listeners.onIssuesFetch((issues) => {
-      console.log(issues);
       saveIssues(issues);
       setAllIssues(issues);
       setIsRefreshing(false);
@@ -54,7 +53,7 @@ export const Home: FC = () => {
       setAllIssues(savedIssues);
     };
     loadCachedIssues();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     if (!allIssues) return;

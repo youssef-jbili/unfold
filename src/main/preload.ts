@@ -7,6 +7,7 @@ import {
   CheckTokenResponse,
   EventType,
   GetGitlabIssuesMessage,
+  GetSettingsResponse,
   HasTokenResponse,
   Unsubscriber,
 } from '../types/ipc';
@@ -43,6 +44,11 @@ const electronHandler = {
   network: {
     getNetworkStatus: (): Promise<boolean> => {
       return sendMessagePromise(Channel.GetNetworkStatus);
+    },
+  },
+  settings: {
+    getSettings: (): Promise<GetSettingsResponse> => {
+      return sendMessagePromise(Channel.GetSettings);
     },
   },
   listeners: {
